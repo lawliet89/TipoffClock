@@ -1,0 +1,15 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/title_general_settings">
+        <CheckBoxPreference
+            android:key="setting_enabled"
+            android:title="@string/enabled_setting"
+            android:defaultValue="true" />
+
+        <io.gitub.lawliet89.tipoffclock.TimezonePreference
+            android:key="setting_clock_timezone"
+            android:title="@string/clock_timezone"
+            android:summary="@string/clock_timezone_summary" />
+    </PreferenceCategory>
+</PreferenceScreen>
