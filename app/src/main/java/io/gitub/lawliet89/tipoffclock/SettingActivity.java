@@ -15,6 +15,8 @@ public class SettingActivity extends AppCompatActivity {
         if (savedInstanceState == null)
             getFragmentManager().beginTransaction()
                 .add(android.R.id.content, new GeneralSettingFragment()).commit();
+
+        ServiceStartReceiver.startService(this);
     }
 
     public class GeneralSettingFragment extends PreferenceFragment {

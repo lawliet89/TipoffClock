@@ -11,5 +11,7 @@
             android:key="setting_clock_timezone"
             android:title="@string/clock_timezone"
             android:summary="@string/clock_timezone_summary" />
+
+        <!-- Priority! -->
     </PreferenceCategory>
 </PreferenceScreen>
