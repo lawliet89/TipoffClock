@@ -34,6 +34,11 @@ public class TimezonePreference  extends ListPreference{
                 Calendar.getInstance().getTimeZone().getID());
     }
 
+    @Override
+    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+        super.onSetInitialValue(restoreValue, Calendar.getInstance().getTimeZone().getID());
+    }
+
 
     @Override
     public CharSequence getSummary() {
