@@ -7,7 +7,7 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 
-font_file = "Roboto-Light.ttf"
+font_file = "MedulaOne-Regular.ttf"
 
 densities = [
     "hdpi",
@@ -48,20 +48,21 @@ def multiply_round(values, multiplier):
 
 def get_font_size(density):
     return {
-        'xxxhdpi': 32,
-        'xxhdpi': 24,
-        'xhdpi': 18,
-        'hdpi': 14,
-        'mdpi': 10,
+        'xxxhdpi': 70,
+        'xxhdpi': 52,
+        'xhdpi': 32,
+        'hdpi': 24,
+        'mdpi': 18,
         'ldpi': 8
-    }.get(density, 10)
+    }.get(density, 8)
 
-def write_image(hour, minute, directory, icon_size, font):
+def write_image(hour, minute, directory, icon_size, font, font_size):
     time_string = "%d:%02d" % (hour, minute)
     icon = Image.new('RGBA', (icon_size['width'], icon_size['height']), transparent_colour)
     drawable = ImageDraw.Draw(icon)
     text_width, text_height = drawable.textsize(time_string, font)
-    position = ((icon_size['width'] - text_width) / 2, (icon_size['height'] - text_height) / 2)
+    position = ((icon_size['width'] - text_width) / 2,
+        (icon_size['height'] - font_size) / 2)
     drawable.text(position, time_string, white, font)
     filename = os.path.join(directory, name_format % (hour, minute)) + ".png"
     icon.save(filename)
@@ -101,8 +102,7 @@ def main():
         print density
         for hour in range(0, 24):
             for minute in range(0, 60):
-                write_image(hour, minute, directory, icon_size, font)
-
+                write_image(hour, minute, directory, icon_size, font, get_font_size(density))
     write_xml_file(xml_output)
 
 main()
