@@ -74,7 +74,7 @@ public class TipoffClockService extends Service {
     private Notification buildNotification() {
         Calendar calendar = getCalendar();
         Date date = calendar.getTime();
-        String title = String.format("%s %s", timeFormat.format(date), dateFormat.format(date));
+        String title = String.format("%s - %s", timeFormat.format(date), dateFormat.format(date));
         builder.setSmallIcon(R.drawable.ic_clock_24h, getImageOffsetIndex(calendar))
                 .setCategory(Notification.CATEGORY_STATUS)
                 .setContentTitle(title)
