@@ -2,6 +2,7 @@ package io.gitub.lawliet89.tipoffclock;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -17,18 +18,18 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null)
             getFragmentManager().beginTransaction()
-                    .add(android.R.id.content, new GeneralSettingFragment(this)).commit();
+                    .add(android.R.id.content, new GeneralSettingFragment()).commit();
 
         TipoffClockService.startServiceIfEnabled(this);
     }
 
-    public class GeneralSettingFragment extends PreferenceFragment {
+    public class GeneralSettingFragment
+            extends PreferenceFragment
+            implements SharedPreferences.OnSharedPreferenceChangeListener {
         private final Preference.OnPreferenceChangeListener enabledChangeListener;
-        private Context context;
 
-        public GeneralSettingFragment(Context context) {
+        public GeneralSettingFragment() {
             enabledChangeListener = new EnabledChangeListener();
-            this.context = context;
         }
 
         public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,13 @@ public class SettingActivity extends AppCompatActivity {
                     PreferenceManager.getDefaultSharedPreferences(enabledPreference.getContext())
                             .getBoolean(enabledPreference.getKey(), true));
 
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals("setting_enabled")) {
+                TipoffClockService.startServiceIfEnabled(getActivity());
+            }
         }
 
         private class EnabledChangeListener implements Preference.OnPreferenceChangeListener {

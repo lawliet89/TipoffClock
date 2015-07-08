@@ -19,7 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class TipoffClockService extends Service {
+public class TipoffClockService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener{
     public static final int ONGOING_NOTIFICATION_ID = 1359;
     public static boolean service_enabled = false;
     private NotificationCompat.Builder builder;
@@ -28,16 +28,6 @@ public class TipoffClockService extends Service {
     private DateFormat dateFormat;
     private DateFormat timeFormat;
     private UpdateClockReceiver updateReceiver;
-    private SharedPreferences.OnSharedPreferenceChangeListener preferenceListener = new SharedPreferences.OnSharedPreferenceChangeListener(){
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (startServiceIfEnabled(TipoffClockService.this)){
-                updateSettings();
-                updateClock();
-            }
-        }
-    };
-
     public TipoffClockService() {
 
     }
@@ -69,6 +59,14 @@ public class TipoffClockService extends Service {
     }
 
     @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (startServiceIfEnabled(this)) {
+            updateSettings();
+            updateClock();
+        }
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
         // Binding is not supported
         return null;
@@ -92,7 +90,7 @@ public class TipoffClockService extends Service {
         dateFormat = android.text.format.DateFormat.getLongDateFormat(this);
         timeFormat = android.text.format.DateFormat.getTimeFormat(this);
         updateSettings();
-        settings.registerOnSharedPreferenceChangeListener(preferenceListener);
+        settings.registerOnSharedPreferenceChangeListener(this);
 
         // Setup every minute update
         updateReceiver = new UpdateClockReceiver(this);
@@ -115,6 +113,7 @@ public class TipoffClockService extends Service {
     @Override
     public void onDestroy() {
         unregisterReceiver(updateReceiver);
+        settings.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     private Calendar getCalendar() {
@@ -128,13 +127,12 @@ public class TipoffClockService extends Service {
         builder.setSmallIcon(R.drawable.ic_clock_24h, getImageOffsetIndex(calendar))
                 .setCategory(Notification.CATEGORY_STATUS)
                 .setContentTitle(title)
-                .setContentText(timezone.getDisplayName());
+                .setContentText(timezone.getDisplayName(true, TimeZone.LONG));
         return builder.build();
     }
 
     private void updateClock() {
         startForeground(ONGOING_NOTIFICATION_ID, buildNotification());
-        settings.unregisterOnSharedPreferenceChangeListener(preferenceListener);
     }
 
     private class UpdateClockReceiver extends BroadcastReceiver {
