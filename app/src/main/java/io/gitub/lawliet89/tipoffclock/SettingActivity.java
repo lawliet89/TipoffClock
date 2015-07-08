@@ -32,6 +32,7 @@ public class SettingActivity extends AppCompatActivity {
             enabledChangeListener = new EnabledChangeListener();
         }
 
+        @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
@@ -43,7 +44,15 @@ public class SettingActivity extends AppCompatActivity {
             enabledChangeListener.onPreferenceChange(enabledPreference,
                     PreferenceManager.getDefaultSharedPreferences(enabledPreference.getContext())
                             .getBoolean(enabledPreference.getKey(), true));
+            getPreferenceManager().getDefaultSharedPreferences(getActivity())
+                    .registerOnSharedPreferenceChangeListener(this);
+        }
 
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            getPreferenceManager().getDefaultSharedPreferences(getActivity())
+                    .unregisterOnSharedPreferenceChangeListener(this);
         }
 
         @Override
