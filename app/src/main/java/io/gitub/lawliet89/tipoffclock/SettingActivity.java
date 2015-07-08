@@ -23,7 +23,7 @@ public class SettingActivity extends AppCompatActivity {
         TipoffClockService.startServiceIfEnabled(this);
     }
 
-    public class GeneralSettingFragment
+    public static class GeneralSettingFragment
             extends PreferenceFragment
             implements SharedPreferences.OnSharedPreferenceChangeListener {
         private final Preference.OnPreferenceChangeListener enabledChangeListener;

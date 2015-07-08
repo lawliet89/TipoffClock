@@ -24,5 +24,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:support-v4:22.2.0'
     compile 'org.apache.commons:commons-lang3:3.4'
-    compile group: 'com.google.guava', name: 'guava', version: '18.0'
 }
