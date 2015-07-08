@@ -22,6 +22,9 @@ import java.util.TimeZone;
 public class TipoffClockService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener{
     public static final int ONGOING_NOTIFICATION_ID = 1359;
     public static boolean service_enabled = false;
+
+    private static final String ICON_TEMPLATE = "ic_clock_24h_%02d_%02d";
+
     private NotificationCompat.Builder builder;
     private TimeZone timezone;
     private int priority;
@@ -141,12 +144,23 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
         Calendar calendar = getCalendar();
         Date date = calendar.getTime();
         String title = String.format("%s - %s", timeFormat.format(date), dateFormat.format(date));
-        builder.setSmallIcon(R.drawable.ic_clock_24h, getImageOffsetIndex(calendar))
+        builder.setSmallIcon(getResource(calendar))
                 .setCategory(Notification.CATEGORY_STATUS)
                 .setContentTitle(title)
                 .setContentText(timezone.getDisplayName(timezone.inDaylightTime(date), TimeZone.LONG))
                 .setPriority(priority);
         return builder.build();
+    }
+
+    private int getResource(Calendar calendar) {
+        return getResource(calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE));
+    }
+
+    private int getResource(int hour, int minute) {
+        return getResources().getIdentifier(String.format(ICON_TEMPLATE, hour, minute),
+                "drawable", getApplicationInfo().packageName);
+
     }
 
     private void updateClock() {
