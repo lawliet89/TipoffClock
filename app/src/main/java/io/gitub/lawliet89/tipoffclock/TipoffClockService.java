@@ -106,6 +106,8 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
     private void updateSettings() {
         timezone = TimeZone.getTimeZone(settings.getString("setting_clock_timezone",
                 Calendar.getInstance().getTimeZone().getID()));
+        dateFormat.setTimeZone(timezone);
+        timeFormat.setTimeZone(timezone);
         switch(settings.getString("setting_priority", "default")) {
             case "max":
                 priority = NotificationCompat.PRIORITY_MAX;
