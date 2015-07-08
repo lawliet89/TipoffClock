@@ -7,4 +7,27 @@
     <string name="enabled_setting">Enable Clock</string>
     <string name="enabled_true">Clock is enabled</string>
     <string name="enabled_false">Clock is disabled</string>
+
+    <string name="priority_setting">Notification Priority</string>
+    <string name="priority_summary">
+        A higher priority will move the clock higher up in the list of notifications.
+        Minimum priority wil cause the clock to not appear in the status bar.
+    </string>
+
+    <string-array name="priority_entries">
+        <item>Maximum</item>
+        <item>High</item>
+        <item>Normal</item>
+        <item>Low</item>
+        <item>Minimum</item>
+    </string-array>
+
+    <string-array name="priority_values">
+        <item>max</item>
+        <item>high</item>
+        <item>default</item>
+        <item>low</item>
+        <item>min</item>
+    </string-array>
+
 </resources>

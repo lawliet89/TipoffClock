@@ -12,6 +12,12 @@
             android:title="@string/clock_timezone"
             android:summary="@string/clock_timezone_summary" />
 
-        <!-- Priority! -->
+        <ListPreference
+            android:key="setting_priority"
+            android:title="@string/priority_setting"
+            android:summary="@string/priority_summary"
+            android:defaultValue="default"
+            android:entries="@array/priority_entries"
+            android:entryValues="@array/priority_values" />
     </PreferenceCategory>
 </PreferenceScreen>

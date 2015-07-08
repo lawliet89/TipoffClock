@@ -24,6 +24,7 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
     public static boolean service_enabled = false;
     private NotificationCompat.Builder builder;
     private TimeZone timezone;
+    private int priority;
     private SharedPreferences settings;
     private DateFormat dateFormat;
     private DateFormat timeFormat;
@@ -102,6 +103,22 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
     private void updateSettings() {
         timezone = TimeZone.getTimeZone(settings.getString("setting_clock_timezone",
                 Calendar.getInstance().getTimeZone().getID()));
+        switch(settings.getString("setting_priority", "default")) {
+            case "max":
+                priority = NotificationCompat.PRIORITY_MAX;
+                break;
+            case "high":
+                priority = NotificationCompat.PRIORITY_HIGH;
+                break;
+            case "low":
+                priority = NotificationCompat.PRIORITY_LOW;
+                break;
+            case "min":
+                priority = NotificationCompat.PRIORITY_MIN;
+                break;
+            default:
+                priority = NotificationCompat.PRIORITY_DEFAULT;
+        }
     }
 
     @Override
@@ -127,7 +144,8 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
         builder.setSmallIcon(R.drawable.ic_clock_24h, getImageOffsetIndex(calendar))
                 .setCategory(Notification.CATEGORY_STATUS)
                 .setContentTitle(title)
-                .setContentText(timezone.getDisplayName(timezone.inDaylightTime(date), TimeZone.LONG));
+                .setContentText(timezone.getDisplayName(timezone.inDaylightTime(date), TimeZone.LONG))
+                .setPriority(priority);
         return builder.build();
     }
 

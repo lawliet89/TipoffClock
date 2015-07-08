@@ -6,7 +6,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <service
             android:name=".TipoffClockService"
             android:enabled="true"
@@ -15,7 +15,8 @@
 
         <activity
             android:name=".SettingActivity"
-            android:label="@string/title_general_settings" >
+            android:icon="@mipmap/ic_launcher_icon"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
