@@ -10,11 +10,6 @@ import android.content.Intent;
 public class ServiceStartReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        startService(context);
-    }
-
-    public static void startService(Context context) {
-        Intent serviceIntent = new Intent(context, TipoffClockService.class);
-        context.startService(serviceIntent);
+        TipoffClockService.startServiceIfEnabled(context);
     }
 }
