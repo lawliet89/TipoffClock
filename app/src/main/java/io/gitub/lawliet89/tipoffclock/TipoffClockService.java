@@ -83,7 +83,7 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
         builder = new NotificationCompat.Builder(this);
         builder.setContentIntent(intent)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.drawable.notification_clock_icon));
+                        R.mipmap.ic_launcher_icon));
 
         // Setup settings
         settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -127,7 +127,7 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
         builder.setSmallIcon(R.drawable.ic_clock_24h, getImageOffsetIndex(calendar))
                 .setCategory(Notification.CATEGORY_STATUS)
                 .setContentTitle(title)
-                .setContentText(timezone.getDisplayName(true, TimeZone.LONG));
+                .setContentText(timezone.getDisplayName(timezone.inDaylightTime(date), TimeZone.LONG));
         return builder.build();
     }
 
