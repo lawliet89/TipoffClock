@@ -48,16 +48,15 @@ def multiply_round(values, multiplier):
 
 def get_font_size(density):
     return {
-        'xxxhdpi': 70,
-        'xxhdpi': 52,
-        'xhdpi': 32,
-        'hdpi': 24,
-        'mdpi': 18,
-        'ldpi': 8
+        'xxxhdpi': 82,
+        'xxhdpi': 62,
+        'xhdpi': 42,
+        'hdpi': 30,
+        'mdpi': 18
     }.get(density, 8)
 
 def write_image(hour, minute, directory, icon_size, font, font_size):
-    time_string = "%d:%02d" % (hour, minute)
+    time_string = "%02d%02d" % (hour, minute)
     icon = Image.new('RGBA', (icon_size['width'], icon_size['height']), transparent_colour)
     drawable = ImageDraw.Draw(icon)
     text_width, text_height = drawable.textsize(time_string, font)
