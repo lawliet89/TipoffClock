@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.AlarmClock;
 import android.support.v4.app.NotificationCompat;
 
 import java.text.DateFormat;
@@ -79,15 +80,24 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
     @Override
     public void onCreate() {
         // Set up notification builder
-        Intent settingsIntent = new Intent(this, SettingActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(SettingActivity.class);
-        stackBuilder.addNextIntent(settingsIntent);
-        PendingIntent intent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        TaskStackBuilder settingBuilder = TaskStackBuilder.create(this);
+        settingBuilder.addParentStack(SettingActivity.class);
+        settingBuilder.addNextIntent(new Intent(this, SettingActivity.class));
+        PendingIntent settingIntent = settingBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        TaskStackBuilder contentBuilder = TaskStackBuilder.create(this);
+        contentBuilder.addParentStack(SettingActivity.class);
+        contentBuilder.addNextIntent(new Intent(AlarmClock.ACTION_SHOW_ALARMS));
+        PendingIntent contentIntent = contentBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
         builder = new NotificationCompat.Builder(this);
-        builder.setContentIntent(intent)
+        builder.setContentIntent(contentIntent)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.mipmap.ic_launcher_icon));
+                        R.mipmap.ic_launcher_icon))
+                .addAction(R.drawable.ic_setting,
+                        getResources().getString(R.string.action_settings), settingIntent);
 
         // Setup settings
         settings = PreferenceManager.getDefaultSharedPreferences(this);
