@@ -33,6 +33,8 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
     private DateFormat dateFormat;
     private DateFormat timeFormat;
     private UpdateClockReceiver updateReceiver;
+    private ScreenToggleReceiver screenToggleReceiver;
+
     public TipoffClockService() {
 
     }
@@ -107,6 +109,16 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
         settings.registerOnSharedPreferenceChangeListener(this);
 
         // Setup every minute update
+        registerPerMinuteReceiver();
+
+        screenToggleReceiver = new ScreenToggleReceiver(this);
+        IntentFilter screenFilter = new IntentFilter();
+        screenFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        screenFilter.addAction(Intent.ACTION_SCREEN_ON);
+        registerReceiver(screenToggleReceiver, screenFilter);
+    }
+
+    private void registerPerMinuteReceiver() {
         updateReceiver = new UpdateClockReceiver(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
@@ -144,8 +156,13 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(updateReceiver);
+        unregisterPerMinuteReceiver();
+        unregisterReceiver(screenToggleReceiver);
         settings.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    private void unregisterPerMinuteReceiver() {
+        unregisterReceiver(updateReceiver);
     }
 
     private Calendar getCalendar() {
@@ -191,6 +208,25 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
             String action = intent.getAction();
             if (action.equals(Intent.ACTION_TIME_TICK)) {
                 service.updateClock();
+            }
+        }
+    }
+
+    private class ScreenToggleReceiver extends BroadcastReceiver {
+        private TipoffClockService service;
+
+        public ScreenToggleReceiver(TipoffClockService service) {
+            this.service = service;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                service.unregisterPerMinuteReceiver();
+            }
+            else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                service.registerPerMinuteReceiver();
             }
         }
     }
