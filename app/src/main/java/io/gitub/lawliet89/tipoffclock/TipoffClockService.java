@@ -227,6 +227,7 @@ public class TipoffClockService extends Service implements SharedPreferences.OnS
             }
             else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 service.registerPerMinuteReceiver();
+                service.updateClock();
             }
         }
     }
